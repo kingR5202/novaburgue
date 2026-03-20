@@ -1,0 +1,593 @@
+/* ============================================================
+   MODAL DE SELEÇÃO DE OPÇÕES + CHECKOUT PIX
+   Império do Burgão
+   ============================================================ */
+
+/* ---------- OVERLAY ---------- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 100000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ---------- MODAL CONTAINER ---------- */
+.modal-product {
+    background: #fff;
+    width: 100%;
+    max-width: 480px;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
+    position: relative;
+}
+
+.modal-overlay.active .modal-product {
+    transform: translateY(0);
+}
+
+/* ---------- BOTÃO VOLTAR ---------- */
+.modal-back-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 10;
+    background: #fc6a05;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.modal-back-btn::before {
+    content: '‹';
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* ---------- IMAGEM DO PRODUTO ---------- */
+.modal-product-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* ---------- CORPO DO MODAL (SCROLLABLE) ---------- */
+.modal-body-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px 120px 16px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ---------- INFO DO PRODUTO ---------- */
+.modal-product-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 8px 0;
+}
+
+.modal-product-prices {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.modal-price-original {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.modal-price-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.modal-price-current {
+    font-size: 26px;
+    font-weight: 700;
+    color: #077c22;
+}
+
+.modal-product-stock {
+    font-size: 13px;
+    color: #ef1d2c;
+    margin: 6px 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.modal-product-stock b {
+    background: #ef1d2c;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0 6px;
+    font-size: 12px;
+}
+
+/* ---------- DESCRIÇÃO ---------- */
+.modal-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 8px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-product-description {
+    font-size: 14px;
+    color: #555;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+/* ---------- SEÇÃO REFRIGERANTES ---------- */
+.modal-drinks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+}
+
+.modal-drinks-header-left h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+}
+
+.modal-drinks-header-left p {
+    font-size: 13px;
+    color: #888;
+    margin: 2px 0 0 0;
+}
+
+.modal-drinks-counter-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.modal-drinks-counter-badge span {
+    background: #eee;
+    color: #555;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.modal-drinks-counter-badge .badge-ok {
+    background: #077c22;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* ---------- LISTA DE BEBIDAS ---------- */
+.modal-drink-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.modal-drink-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-drink-item:last-child {
+    border-bottom: none;
+}
+
+.modal-drink-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.modal-drink-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-drink-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-drink-controls button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    line-height: 1;
+}
+
+.modal-drink-controls button:active {
+    transform: scale(0.9);
+}
+
+.modal-drink-controls button.active-btn {
+    border-color: #fc6a05;
+    color: #fc6a05;
+}
+
+.modal-drink-qty {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ---------- OBSERVAÇÃO ---------- */
+.modal-obs-section {
+    margin-bottom: 20px;
+}
+
+.modal-obs-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 8px 0;
+}
+
+.modal-obs-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    min-height: 60px;
+    color: #333;
+    transition: border-color 0.2s;
+}
+
+.modal-obs-textarea:focus {
+    outline: none;
+    border-color: #fc6a05;
+}
+
+.modal-obs-count {
+    text-align: right;
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 4px;
+}
+
+/* ---------- RODAPÉ FIXO (ADICIONAR AO CARRINHO) ---------- */
+.modal-footer-fixed {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #eee;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 5;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+}
+
+.modal-footer-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #077c22;
+}
+
+.modal-footer-btn {
+    background: #077c22;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+}
+
+.modal-footer-btn:hover {
+    background: #066a1c;
+}
+
+.modal-footer-btn:active {
+    transform: scale(0.96);
+}
+
+.modal-footer-btn:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   MODAL DE CHECKOUT PIX
+   ============================================================ */
+.pix-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.pix-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.pix-modal {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 400px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.pix-modal-overlay.active .pix-modal {
+    transform: scale(1);
+}
+
+.pix-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.pix-modal-header-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #fc6a05, #ef1d2c);
+}
+
+.pix-modal-body {
+    padding: 24px;
+    text-align: center;
+}
+
+.pix-modal-icon {
+    width: 64px;
+    height: 64px;
+    margin: -32px auto 12px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 28px;
+    position: relative;
+    z-index: 5;
+}
+
+.pix-modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 4px 0;
+}
+
+.pix-modal-subtitle {
+    font-size: 14px;
+    color: #777;
+    margin: 0 0 20px 0;
+}
+
+.pix-modal-value-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.pix-modal-value-label {
+    color: #777;
+    font-size: 14px;
+}
+
+.pix-modal-value-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: #077c22;
+}
+
+.pix-code-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 12px;
+    background-color: #f4f4f5;
+    color: #555;
+    word-break: break-all;
+}
+
+.pix-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.pix-modal-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pix-btn-qr {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.pix-btn-copy {
+    background-color: #fc6a05;
+    color: #fff;
+}
+
+.pix-btn-copy:active,
+.pix-btn-qr:active {
+    transform: scale(0.96);
+}
+
+.pix-qr-container {
+    margin-top: 12px;
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    display: none;
+}
+
+.pix-qr-container img {
+    max-width: 180px !important;
+    margin: 0 auto;
+    display: block;
+}
+
+.pix-status-text {
+    font-size: 13px;
+    color: #888;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pix-status-text .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #ddd;
+    border-top-color: #fc6a05;
+    border-radius: 50%;
+    animation: pix-spin 0.8s linear infinite;
+}
+
+@keyframes pix-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---------- ANIMAÇÃO DE CARREGAMENTO NO BOTÃO ---------- */
+.modal-footer-btn .btn-loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: pix-spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (min-width: 481px) {
+    .modal-product {
+        border-radius: 20px;
+        max-height: 85vh;
+        margin-bottom: 20px;
+    }
+
+    .modal-overlay {
+        align-items: center;
+    }
+}

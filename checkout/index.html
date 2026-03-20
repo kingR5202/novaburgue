@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout - Império do Burgão</title>
+    <link rel="shortcut icon" type="image/jpg" href="../images/logo_1.webp">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0eb;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .ck-header {
+            background: #fc6a05 url('../images/banner.webp') center/cover no-repeat;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .ck-back-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #fc6a05;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ck-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin: 0 auto;
+            display: block;
+            background: #fff;
+            object-fit: contain;
+        }
+
+        /* CONTAINER */
+        .ck-container {
+            max-width: 680px;
+            width: 100%;
+            margin: -20px auto 0;
+            padding: 0 16px 40px;
+        }
+
+        .ck-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .ck-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fc6a05;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* FORM */
+        .ck-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .ck-label span {
+            color: #ef1d2c;
+        }
+
+        .ck-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #333;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .ck-input:focus {
+            outline: none;
+            border-color: #fc6a05;
+        }
+
+        .ck-input::placeholder {
+            color: #bbb;
+        }
+
+        .ck-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin: 24px 0 12px;
+        }
+
+        /* OFERTAS */
+        .ck-offer {
+            display: flex;
+            align-items: center;
+            border: 2px solid #fc6a05;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .ck-offer:hover {
+            background: #fff8f0;
+        }
+
+        .ck-offer.selected {
+            background: #fff3e6;
+            border-color: #fc6a05;
+        }
+
+        .ck-offer-img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .ck-offer-info {
+            flex: 1;
+        }
+
+        .ck-offer-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .ck-offer-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fc6a05;
+        }
+
+        .ck-offer-checkbox {
+            width: 22px;
+            height: 22px;
+            accent-color: #fc6a05;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* CARRINHO RESUMO */
+        .ck-cart-item {
+            display: flex;
+            align-items: center;
+            border: 2px solid #fc6a05;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .ck-cart-item-img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .ck-cart-item-info {
+            flex: 1;
+        }
+
+        .ck-cart-item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .ck-cart-item-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fc6a05;
+        }
+
+        .ck-cart-item-qty {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* TOTAL + GERAR PIX */
+        .ck-separator {
+            border: none;
+            border-top: 2px solid #eee;
+            margin: 20px 0;
+        }
+
+        .ck-total {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fc6a05;
+            margin-bottom: 16px;
+        }
+
+        .ck-pix-btn {
+            width: 100%;
+            padding: 16px;
+            background: #077c22;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .ck-pix-btn:hover {
+            background: #066a1c;
+        }
+
+        .ck-pix-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .ck-pix-btn .btn-spin {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: ck-spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes ck-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* PARCEIRO BADGE */
+        .ck-partner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+
+        .ck-partner-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: #ef1d2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .ck-partner-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .ck-partner-sub {
+            font-size: 12px;
+            color: #888;
+            font-weight: 400;
+        }
+
+        /* FOOTER */
+        .ck-footer {
+            background: #fc6a05;
+            padding: 16px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .ck-footer b {
+            font-size: 14px;
+        }
+
+        .ck-footer span {
+            font-size: 12px;
+            font-weight: normal;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .ck-footer a {
+            color: #fff;
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* PIX MODAL */
+        .pix-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .pix-modal {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pix-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .pix-header-bar {
+            height: 80px;
+            background: linear-gradient(135deg, #fc6a05, #ef1d2c);
+        }
+
+        .pix-body {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .pix-icon {
+            width: 56px;
+            height: 56px;
+            background: #fff;
+            border-radius: 50%;
+            margin: -28px auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 5;
+        }
+
+        .pix-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 4px;
+        }
+
+        .pix-sub {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .pix-val-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .pix-val-label {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .pix-val-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #077c22;
+        }
+
+        .pix-code-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 11px;
+            background: #f4f4f5;
+            color: #555;
+            word-break: break-all;
+        }
+
+        .pix-btns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .pix-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .pix-btn-qr {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .pix-btn-copy {
+            background: #fc6a05;
+            color: #fff;
+        }
+
+        .pix-qr-box {
+            display: none;
+            padding: 16px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .pix-qr-box img {
+            max-width: 180px !important;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .pix-waiting {
+            font-size: 13px;
+            color: #888;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .pix-waiting .pix-spin-s {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #fc6a05;
+            border-radius: 50%;
+            animation: ck-spin 0.8s linear infinite;
+        }
+
+        /* Erro validação */
+        .ck-input.error {
+            border-color: #ef1d2c;
+        }
+
+        .ck-error-msg {
+            color: #ef1d2c;
+            font-size: 12px;
+            margin-top: -12px;
+            margin-bottom: 12px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="ck-header">
+        <a href="../cart/index.html" class="ck-back-btn">‹ VOLTAR</a>
+        <img src="../images/logo.webp" alt="Império do Burgão" class="ck-logo">
+    </header>
+
+    <div class="ck-container">
+        <div class="ck-card">
+            <h2 class="ck-title">Finalize seu pedido</h2>
+
+            <!-- FORMULÁRIO -->
+            <label class="ck-label">Nome completo <span>*</span></label>
+            <input class="ck-input" id="ck-nome" placeholder="Nome e Sobrenome">
+            <p class="ck-error-msg" id="err-nome">Informe seu nome completo</p>
+
+            <label class="ck-label">Telefone <span>*</span></label>
+            <input class="ck-input" id="ck-telefone" placeholder="Número com DDD" maxlength="15">
+            <p class="ck-error-msg" id="err-telefone">Informe um telefone válido</p>
+
+            <h3 class="ck-section-title">Dados da entrega</h3>
+            <label class="ck-label">CEP <span>*</span></label>
+            <input class="ck-input" id="ck-cep" placeholder="12345-000" maxlength="9">
+            <p class="ck-error-msg" id="err-cep">Informe um CEP válido</p>
+
+            <!-- OFERTAS -->
+            <h3 class="ck-section-title">Ofertas disponíveis:</h3>
+            <div id="ck-offers"></div>
+
+            <!-- CARRINHO RESUMO -->
+            <h3 class="ck-section-title">Seu carrinho:</h3>
+            <div id="ck-cart-summary"></div>
+
+            <hr class="ck-separator">
+
+            <!-- TOTAL -->
+            <div class="ck-total" id="ck-total">Total: R$ 0,00</div>
+
+            <!-- GERAR PIX -->
+            <button class="ck-pix-btn" id="btn-gerar-pix" onclick="gerarPix()">Gerar PIX</button>
+
+            <!-- PARCEIRO -->
+            <div class="ck-partner">
+                <img src="../images/ifood.jpg" alt="iFood"
+                    style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                <div>
+                    <div class="ck-partner-text">iFood Parceiros</div>
+                    <div class="ck-partner-sub">Empresa parceira verificada <img
+                            src="../images/verified-check-svgrepo-com.svg" alt="✅"
+                            style="width:16px;height:16px;vertical-align:middle;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="ck-footer">
+        <b>Império do Burgão</b>
+        <span>CNPJ: 50.463.196/0001-29</span>
+        <a href="#">Termos de Uso</a>
+        <a href="#">Política de Privacidade</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script src="../js/products.js"></script>
+    <script>
+        const PROXY_URL = '/api/proxy';
+        const utms = Object.fromEntries(new URLSearchParams(window.location.search));
+        let paymentCheckInterval = null;
+        let selectedOffers = {};
+
+        // ============================================================
+        // RENDERIZAR CHECKOUT
+        // ============================================================
+        function renderCheckout() {
+            renderOffers();
+            renderCartSummary();
+            updateCheckoutTotal();
+            setupPhoneMask();
+            setupCepMask();
+        }
+
+        function renderOffers() {
+            const offersEl = document.getElementById('ck-offers');
+            offersEl.innerHTML = OFERTAS_CHECKOUT.map(offer => `
+                <div class="ck-offer" id="offer-${offer.id}" onclick="toggleOffer('${offer.id}')">
+                    <img class="ck-offer-img" src="../${offer.imagem}" alt="${offer.nome}">
+                    <div class="ck-offer-info">
+                        <div class="ck-offer-name">${offer.nome}</div>
+                        <div class="ck-offer-price">R$ <span style="font-size:18px">${(offer.preco / 100).toFixed(2).replace('.', ',')}</span></div>
+                    </div>
+                    <input type="checkbox" class="ck-offer-checkbox" id="check-${offer.id}">
+                </div>
+            `).join('');
+        }
+
+        function toggleOffer(offerId) {
+            const offer = OFERTAS_CHECKOUT.find(o => o.id === offerId);
+            if (!offer) return;
+
+            if (selectedOffers[offerId]) {
+                delete selectedOffers[offerId];
+            } else {
+                selectedOffers[offerId] = offer;
+            }
+
+            document.getElementById(`check-${offerId}`).checked = !!selectedOffers[offerId];
+            document.getElementById(`offer-${offerId}`).classList.toggle('selected', !!selectedOffers[offerId]);
+            updateCheckoutTotal();
+        }
+
+        function renderCartSummary() {
+            const items = CART.getItems();
+            const summaryEl = document.getElementById('ck-cart-summary');
+
+            if (items.length === 0) {
+                window.location.href = '../cart/index.html';
+                return;
+            }
+
+            summaryEl.innerHTML = items.map(item => `
+                <div class="ck-cart-item">
+                    <img class="ck-cart-item-img" src="../${item.imagem}" alt="${item.nome}">
+                    <div class="ck-cart-item-info">
+                        <div class="ck-cart-item-name">${item.nome}</div>
+                        <div class="ck-cart-item-price">R$ ${(item.preco / 100).toFixed(2).replace('.', ',')}</div>
+                        <div class="ck-cart-item-qty">Quantidade: ${item.qty}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateCheckoutTotal() {
+            let total = CART.getTotal();
+            // Adicionar ofertas selecionadas
+            Object.values(selectedOffers).forEach(offer => {
+                total += offer.preco;
+            });
+            document.getElementById('ck-total').textContent = 'Total: ' + formatPriceBRL(total);
+        }
+
+        // ============================================================
+        // MÁSCARAS
+        // ============================================================
+        function setupPhoneMask() {
+            const tel = document.getElementById('ck-telefone');
+            tel.addEventListener('input', () => {
+                let v = tel.value.replace(/\D/g, '');
+                if (v.length > 11) v = v.slice(0, 11);
+                if (v.length > 6) {
+                    tel.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+                } else if (v.length > 2) {
+                    tel.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+                } else {
+                    tel.value = v;
+                }
+            });
+        }
+
+        function setupCepMask() {
+            const cep = document.getElementById('ck-cep');
+            cep.addEventListener('input', () => {
+                let v = cep.value.replace(/\D/g, '');
+                if (v.length > 8) v = v.slice(0, 8);
+                if (v.length > 5) {
+                    cep.value = `${v.slice(0, 5)}-${v.slice(5)}`;
+                } else {
+                    cep.value = v;
+                }
+            });
+        }
+
+        // ============================================================
+        // VALIDAÇÃO
+        // ============================================================
+        function validate() {
+            let valid = true;
+            const nome = document.getElementById('ck-nome');
+            const tel = document.getElementById('ck-telefone');
+            const cep = document.getElementById('ck-cep');
+
+            // Reset
+            [nome, tel, cep].forEach(el => el.classList.remove('error'));
+            document.querySelectorAll('.ck-error-msg').forEach(el => el.style.display = 'none');
+
+            if (nome.value.trim().length < 3) {
+                nome.classList.add('error');
+                document.getElementById('err-nome').style.display = 'block';
+                valid = false;
+            }
+
+            if (tel.value.replace(/\D/g, '').length < 10) {
+                tel.classList.add('error');
+                document.getElementById('err-telefone').style.display = 'block';
+                valid = false;
+            }
+
+            if (cep.value.replace(/\D/g, '').length < 8) {
+                cep.classList.add('error');
+                document.getElementById('err-cep').style.display = 'block';
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        // ============================================================
+        // GERAR PIX
+        // ============================================================
+        async function gerarPix() {
+            if (!validate()) {
+                // Scroll to the first error
+                const firstError = document.querySelector('.ck-input.error');
+                if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // Detectar se está rodando localmente (sem Vercel)
+            const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const proxyUrl = isLocal ? 'http://localhost:3000/api/proxy' : PROXY_URL;
+
+            const btn = document.getElementById('btn-gerar-pix');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="btn-spin"></span> Gerando PIX...';
+
+            let totalAmount = CART.getTotal();
+            Object.values(selectedOffers).forEach(o => totalAmount += o.preco);
+
+            const customerData = {
+                nome: document.getElementById('ck-nome').value.trim(),
+                telefone: document.getElementById('ck-telefone').value.trim(),
+                cep: document.getElementById('ck-cep').value.trim(),
+            };
+
+            const orderItems = CART.getItems().map(i => ({
+                nome: i.nome,
+                preco: i.preco,
+                qty: i.qty,
+                bebidas: i.drinks,
+                obs: i.obs,
+            }));
+
+            const offersSelected = Object.values(selectedOffers).map(o => ({
+                nome: o.nome,
+                preco: o.preco,
+            }));
+
+            try {
+                const response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: totalAmount,
+                        metadata: {
+                            customer: customerData,
+                            items: orderItems,
+                            ofertas: offersSelected,
+                        }
+                    })
+                });
+
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Erro ao gerar pagamento');
+
+                showPixModal(result, formatPriceBRL(totalAmount), totalAmount);
+
+            } catch (error) {
+                console.error('Erro ao gerar PIX:', error);
+                if (isLocal) {
+                    alert('⚠️ Você está testando localmente.\n\nO pagamento PIX só funciona quando o site está hospedado na Hostinger.\n\nFaça o upload dos arquivos para a Hostinger e verifique se o PHP e cURL estão habilitados.');
+                } else {
+                    alert('Erro ao gerar PIX: ' + (error.message || 'Não foi possível conectar ao servidor de pagamento.\n\nVerifique se os arquivos PHP estão configurados corretamente na Hostinger.'));
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Gerar PIX';
+            }
+        }
+
+        // ============================================================
+        // MODAL PIX
+        // ============================================================
+        function showPixModal(result, priceLabel, amountCents) {
+            const pixCode = result.qr_code || result.pixCopyPaste || result.brcode || (result.pix && result.pix.qrcode) || '';
+            if (!pixCode) {
+                alert('Erro: Não foi possível obter o código PIX.');
+                return;
+            }
+
+            const overlay = document.createElement('div');
+            overlay.className = 'pix-overlay';
+
+            overlay.innerHTML = `
+                <div class="pix-modal">
+                    <button class="pix-close">&times;</button>
+                    <div class="pix-header-bar"></div>
+                    <div class="pix-body">
+                        <div class="pix-icon">🍔</div>
+                        <h2 class="pix-title">Império do Burgão</h2>
+                        <p class="pix-sub">Pagamento via PIX</p>
+
+                        <div class="pix-val-row">
+                            <span class="pix-val-label">Valor Total</span>
+                            <span class="pix-val-amount">${priceLabel}</span>
+                        </div>
+
+                        <input class="pix-code-box" readonly value="${pixCode}">
+
+                        <div class="pix-btns">
+                            <button class="pix-btn pix-btn-qr" id="pix-qr-toggle">Ver QR Code</button>
+                            <button class="pix-btn pix-btn-copy" id="pix-copy">Copiar chave</button>
+                        </div>
+
+                        <div class="pix-qr-box" id="pix-qr-box">
+                            <div id="pix-qr-el"></div>
+                        </div>
+
+                        <div class="pix-waiting">
+                            <span class="pix-spin-s"></span>
+                            Aguardando pagamento...
+                        </div>
+                        
+                        <div class="pix-timer" style="margin-top: 10px; font-weight: bold; color: #d32f2f;">
+                            Tempo restante: <span id="pix-countdown">10:00</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            // Timer Logic
+            let timeLeft = 600; // 10 minutes
+            const timerEl = overlay.querySelector('#pix-countdown');
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    if (paymentCheckInterval) clearInterval(paymentCheckInterval);
+                    overlay.remove();
+                    alert('Tempo para pagamento expirou. Por favor, gere um novo PIX.');
+                    return;
+                }
+                const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                const s = (timeLeft % 60).toString().padStart(2, '0');
+                if (timerEl) timerEl.textContent = `${m}:${s}`;
+            }, 1000);
+
+            // Fechar
+            const closeM = () => {
+                overlay.remove();
+                clearInterval(timerInterval);
+                if (paymentCheckInterval) clearInterval(paymentCheckInterval);
+            };
+            overlay.querySelector('.pix-close').addEventListener('click', closeM);
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) closeM(); });
+
+            // Copiar
+            const copyBtn = overlay.querySelector('#pix-copy');
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(pixCode).then(() => {
+                    copyBtn.textContent = 'Copiado!';
+                    setTimeout(() => copyBtn.textContent = 'Copiar chave', 2000);
+                }).catch(() => {
+                    const inp = overlay.querySelector('.pix-code-box');
+                    inp.select();
+                    document.execCommand('copy');
+                    copyBtn.textContent = 'Copiado!';
+                    setTimeout(() => copyBtn.textContent = 'Copiar chave', 2000);
+                });
+            });
+
+            // QR Code
+            const qrBox = overlay.querySelector('#pix-qr-box');
+            const qrToggle = overlay.querySelector('#pix-qr-toggle');
+            qrToggle.addEventListener('click', () => {
+                const isHidden = qrBox.style.display === 'none' || !qrBox.style.display;
+                qrBox.style.display = isHidden ? 'block' : 'none';
+                qrToggle.textContent = isHidden ? 'Ocultar QR Code' : 'Ver QR Code';
+                if (isHidden && !document.getElementById('pix-qr-el').hasChildNodes()) {
+                    new QRCode(document.getElementById('pix-qr-el'), {
+                        text: pixCode,
+                        width: 180,
+                        height: 180,
+                    });
+                }
+            });
+
+            // Polling
+            startPaymentChecker(result.id);
+        }
+
+        // ============================================================
+        // VERIFICADOR DE PAGAMENTO
+        // ============================================================
+        function startPaymentChecker(transactionId) {
+            if (paymentCheckInterval) clearInterval(paymentCheckInterval);
+
+            console.log('[PIX] Iniciando verificação de pagamento. ID:', transactionId);
+
+            paymentCheckInterval = setInterval(async () => {
+                try {
+                    const res = await fetch(`${PROXY_URL}?id=${transactionId}`);
+                    const data = await res.json();
+
+                    if (data.error) {
+                        console.error('[PIX] Erro retornado pela API:', data.error);
+                        return; // Continua tentando
+                    }
+
+                    const st = (data?.status || '').toLowerCase();
+                    console.log('[PIX] Status detectado:', st);
+
+                    // Cobrir todas variações possíveis de "pago"
+                    const paidStatuses = ['paid', 'succeeded', 'completed', 'approved', 'confirmed', 'settled'];
+
+                    if (paidStatuses.includes(st)) {
+                        clearInterval(paymentCheckInterval);
+
+                        // UX: Mostrar sucesso antes de redirecionar
+                        const modalBody = document.querySelector('.pix-body');
+                        if (modalBody) {
+                            modalBody.innerHTML = `
+                                <div class="pix-icon">✅</div>
+                                <h2 class="pix-title">Pagamento Confirmado!</h2>
+                                <p class="pix-sub">Seu pedido está sendo processado.</p>
+                                <p class="pix-sub">Redirecionando...</p>
+                            `;
+                        }
+
+                        setTimeout(() => {
+                            CART.clear();
+                            window.location.href = REDIRECT_AFTER_PAYMENT;
+                        }, 2000);
+                    }
+                } catch (e) {
+                    console.error('[PIX] Erro ao verificar pagamento:', e);
+                }
+            }, 5000);
+        }
+
+        // Init
+        renderCheckout();
+    </script>
+</body>
+
+</html>
