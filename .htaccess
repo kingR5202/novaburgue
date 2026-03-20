@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Redirecionar /api/proxy para /api/proxy.php
+RewriteRule ^api/proxy$ api/proxy.php [L,QSA]
+
+# Redirecionar /api/webhook para /api/webhook.php
+RewriteRule ^api/webhook$ api/webhook.php [L,QSA]
+
+# Bloquear acesso ao config.php diretamente
+<Files "api/config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

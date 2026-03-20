@@ -1,0 +1,3 @@
+<?php
+// Arquivo renomeado de proxy.php para proxy-php.php para evitar conflito de nomes na Vercel
+// ...existing code...
